@@ -6,7 +6,7 @@ Vue.use(Router);
 
 export default new Router({
   mode: "history",
-  base: process.env.BASE_URL,
+  base: process.env.VUE_APP_API_BASE,
   routes: [
     {
       path: "/",
@@ -14,13 +14,35 @@ export default new Router({
       component: Home
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+      path: "/data",
+      name: "data",
+      component: () => import("@/views/Data.vue")
+    },
+    {
+      path: "/site",
+      name: "site",
+      component: () => import("@/views/Site.vue")
+    },
+    {
+      path: "/message",
+      name: "message",
+      component: () => import("@/views/Message.vue")
+    },
+    {
+      path: "/keyword",
+      name: "keyword",
+      component: () => import("@/views/Keyword.vue")
+    },
+    {
+      path: "/site/:siteId",
+      name: "SiteInput",
+      props: true,
+      component: () => import("@/views/SiteInput.vue")
+    },
+    {
+      path: "/keyword/input",
+      name: "keywordInput",
+      component: () => import("@/views/KeywordInput.vue")
     }
   ]
 });
