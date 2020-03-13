@@ -1,65 +1,54 @@
 <template>
-  <div>
-    <label>hahah</label>
-    <v-form ref="form" v-model="valid" :lazy-validation="lazy">
-      <v-text-field
-        v-model="name"
-        :counter="10"
-        :rules="nameRules"
-        label="Name"
-        required
-      ></v-text-field>
+    <div>
+        <label>hahah</label>
+        <v-form ref="form" v-model="valid" :lazy-validation="lazy">
+            <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" required></v-text-field>
 
-      <v-text-field
-        v-model="email"
-        :rules="emailRules"
-        label="E-mail"
-        required
-      ></v-text-field>
+            <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
 
-      <v-select
-        v-model="select"
-        :items="items"
-        :rules="[v => !!v || 'Item is required']"
-        label="Item"
-        required
-      ></v-select>
+            <v-select
+                v-model="select"
+                :items="items"
+                :rules="[v => !!v || 'Item is required']"
+                label="Item"
+                required
+            ></v-select>
 
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[v => !!v || 'You must agree to continue!']"
-        label="Do you agree?"
-        required
-      ></v-checkbox>
+            <v-checkbox
+                v-model="checkbox"
+                :rules="[v => !!v || 'You must agree to continue!']"
+                label="Do you agree?"
+                required
+            ></v-checkbox>
 
-      <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
-        Validate
-      </v-btn>
+            <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
+                Validate
+            </v-btn>
 
-      <v-btn color="error" class="mr-4" @click="reset">
-        Reset Form
-      </v-btn>
+            <v-btn color="error" class="mr-4" @click="reset">
+                Reset Form
+            </v-btn>
 
-      <v-btn color="warning" @click="resetValidation">
-        Reset Validation
-      </v-btn>
-    </v-form>
-  </div>
+            <v-btn color="warning" @click="resetValidation">
+                Reset Validation
+            </v-btn>
+        </v-form>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "MyInput",
-  props: {
-    value: { type: String, required: true },
-    type: { type: String, required: true },
-    name: { type: String, required: true },
-    placeholder: { type: String, required: false }
-  },
-  methods: {
-    updateValue: function(e) {
-      this.$emit("input", e.target.value);
-    }
-  }
+    name: 'MyInput',
+    props: {
+        value: { type: String, required: true },
+        type: { type: String, required: true },
+        name: { type: String, required: true },
+        placeholder: { type: String, required: false },
+    },
+    methods: {
+        updateValue: function(e) {
+            this.$emit('input', e.target.value);
+        },
+    },
 };
 </script>
