@@ -4,12 +4,17 @@ import router from './router';
 import store from './store/store';
 import vuetify from './plugins/vuetify';
 import VueThinModal from 'vue-thin-modal';
-import VeeValidate from 'vee-validate';
+import { ValidationProvider, extend } from 'vee-validate';
 import 'vue-thin-modal/dist/vue-thin-modal.css';
 import './components/axios';
-import en from 'vee-validate/dist/locale/en';
-import ko from 'vee-validate/dist/locale/ko';
-
+import * as rules from 'vee-validate/dist/rules';
+import { messages } from 'vee-validate/dist/locale/ko.json';
+Object.keys(rules).forEach(rule => {
+    extend(rule, {
+        ...rules[rule],
+        message: messages[rule],
+    });
+});
 import VueGoodTablePlugin from 'vue-good-table';
 
 // import the styles
@@ -22,19 +27,20 @@ Vue.use(VueGoodTablePlugin);
 Vue.use(VueThinModal);
 Vue.use(i18n);
 
-const veeValidateConfig = {
-    locale: JSON.parse(localStorage.getItem('locale')) || 'ko',
-    dictionary: {
-        en,
-        ko,
-    },
-};
+// const veeValidateConfig = {
+//     locale: JSON.parse(localStorage.getItem('locale')) || 'ko',
+//     dictionary: {
+//         en,
+//         ko,
+//     },
+// };
 
-Vue.use(VeeValidate, veeValidateConfig);
+// Vue.use(VeeValidate, veeValidateConfig);
 new Vue({
     router,
     store,
     vuetify,
     i18n,
+    ValidationProvider,
     render: h => h(App),
 }).$mount('#app');

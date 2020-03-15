@@ -35,6 +35,7 @@
         "ID_MALFORMED": "ID malformedaaaaaaaaaaaaaaaaa",
         "ERROR_WITH_FILTER": "Error with filteraaaaaaaaaaaaaaaaa",
         "CITY_ALREADY_EXISTS": "City already existsaaaaaaaaaaaaaaaaa",
-        "AUTHENTICATE_ERROR": "인증시 오류가 발생하였습니다.aaaaaaaaaaaaaaaaa"
+        "AUTHENTICATE_ERROR": "인증시 오류가 발생하였습니다.aaaaaaaaaaaaaaaaa",
+        "BAD_SEARCH_URL": "URL 에 [KEYWORD] 가 반드시 포함되어야 합니다."
     }
 }

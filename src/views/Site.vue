@@ -12,6 +12,12 @@
                     <span v-if="props.column.field == 'edit'">
                         <v-btn color="Warn" @click.stop="editSite(props.row)">편집</v-btn>
                     </span>
+                    <span v-if="props.column.field == 'delete'">
+                        <v-btn color="Warn" @click.stop="deleteSite(props.row.id)">삭제</v-btn>
+                    </span>
+                    <span v-if="props.column.field == 'download'">
+                        <v-btn color="Warn" @click.stop="downloadSite(props.row.id)">다운로드</v-btn>
+                    </span>
                     <span v-else>
                         {{ props.formattedRow[props.column.field] }}
                     </span>
@@ -21,8 +27,8 @@
         <v-container>
             <v-layout fluid justify-end>
                 <v-flex shrink>
-                    <ValidationObserver ref="obs" v-slot="{ invalid, validated, passes, validate }">
-                        <v-form>
+                    <ValidationObserver ref="obs" v-slot="{ handleSubmit }">
+                        <v-form @submit.prevent="handleSubmit(save)" id="siteForm">
                             <v-flex xs12 sm6 md4 text-xs-right mb-2 mt-2 pr-2>
                                 <v-dialog v-model="dialog" max-width="800px" content-class="dlgNewEditItem">
                                     <template v-slot:activator="{ on }">
@@ -33,7 +39,9 @@
                                     </template>
                                     <v-card light>
                                         <v-card-title>
-                                            <span class="headline">새로운 SITE</span>
+                                            <span class="headline">{{
+                                                newSiteMode ? '새로운 SITE' : 'SITE 수정'
+                                            }}</span>
                                         </v-card-title>
                                         <v-card-text>
                                             <v-container grid-list-md>
@@ -58,19 +66,19 @@
                                                     </template>
                                                     <v-flex xs12 md6>
                                                         <VTextFieldWithValidation
-                                                            rules="required|max:7"
+                                                            rules="required|min:4|max:20"
                                                             v-model="site.name"
                                                             id="name"
                                                             name="name"
-                                                            :counter="7"
+                                                            :counter="20"
                                                             :data-vv-as="$t('site.NAME')"
                                                             :label="$t('site.NAME')"
                                                         />
                                                     </v-flex>
                                                     <v-flex xs12 md6>
                                                         <VTextFieldWithValidation
-                                                            rules="required|url|max:120"
-                                                            v-model="site.url"
+                                                            rules="required|min:10|max:120"
+                                                            v-model="site.searchUrl"
                                                             id="url"
                                                             name="url"
                                                             :counter="120"
@@ -91,9 +99,9 @@
                                                 color="primary"
                                                 tile
                                                 outlined
-                                                @click="passes(submit)"
+                                                type="submit"
                                                 class="btnSave"
-                                                :disabled="invalid || !validated"
+                                                form="siteForm"
                                             >
                                                 <v-icon left>mdi-pencil</v-icon>{{ $t('common.SAVE') }}
                                             </v-btn>
@@ -106,11 +114,34 @@
                 </v-flex>
             </v-layout>
         </v-container>
+        <v-container>
+            <v-flex
+                >다운로드 한 사이트 : {{ this.downloadedSiteId === undefined ? '없음' : this.downloadedSiteId }}</v-flex
+            >
+        </v-container>
+        <v-container v-if="this.downloadedSiteId !== undefined">
+            <v-layout fluid>
+                <v-textarea outlined name="input-8-4" label="Site detail" v-model="siteDetail"></v-textarea>
+            </v-layout>
+            <v-text-field
+                label="Outlined"
+                placeholder="상세 페이지 검색 selector"
+                outlined
+                v-model="pageSelector"
+                @keyup="changePageSelector"
+            ></v-text-field>
+            <v-btn color="primary" tile outlined @click="dialogSite = true" class="btnSave">
+                <v-icon left>mdi-cloud-download-outline</v-icon>화면확인
+            </v-btn>
+            <v-dialog v-model="dialogSite" max-width="800px" content-class="dlgNewEditItem">
+                <v-sheet class="pa-12" color="grey lighten-3" v-html="siteDetail"> </v-sheet>
+            </v-dialog>
+        </v-container>
     </div>
 </template>
 <script>
 import _isEmpty from 'lodash/isEmpty';
-import _has from 'lodash/has';
+import _includes from 'lodash/includes';
 import VTextFieldWithValidation from '@/components/forms/VTextFieldWithValidation';
 import { ValidationObserver } from 'vee-validate';
 export default {
@@ -122,18 +153,32 @@ export default {
     data: () => ({
         sites: [],
         dialog: false,
+        dialogSite: false,
         columns: [
             { label: 'id', field: 'id', type: 'number' },
             { label: '사이트명', field: 'name' },
             { label: '검색URL', field: 'searchUrl' },
             { label: '편집', field: 'edit' },
+            { label: '삭제', field: 'delete' },
+            { label: '다운로드', field: 'download' },
         ],
         site: {},
         defaultSite: {},
+        siteDetail: '',
+        downloadedSiteId: null,
+        pageSelector: '',
     }),
     components: {
         ValidationObserver,
         VTextFieldWithValidation,
+    },
+    computed: {
+        newSiteMode() {
+            return this.site.id === undefined;
+        },
+    },
+    mounted() {
+        this.downloadedSiteId = undefined;
     },
     methods: {
         retrieveSite() {
@@ -142,6 +187,30 @@ export default {
         editSite(site) {
             this.site = Object.assign({}, site);
             this.dialog = true;
+        },
+        async deleteSite(siteId) {
+            const res = await this.axios.delete(`/api/site/${siteId}`);
+            if (res.data.header === 'SUCCESS') {
+                this.retrieveSite();
+            }
+        },
+        async downloadSite(siteId) {
+            const res = await this.axios.post(`/api/site/${siteId}`);
+            if (res.data.header === 'SUCCESS') {
+                this.downloadedSiteId = siteId;
+                this.siteDetail = res.data.body;
+            }
+        },
+        changePageSelector() {
+            this.findDetail(this.downloadedSiteId, this.pageSelector);
+        },
+        async findDetail(siteId, pageSelector) {
+            const res = await this.axios.post(`/api/site/${siteId}/find`, {
+                pageSelector,
+            });
+            if (res.data.header === 'SUCCESS') {
+                this.siteDetail = res.data.body;
+            }
         },
         onRowClick(params) {
             console.log(params);
@@ -159,10 +228,7 @@ export default {
                             id: params.row.id,
                             useable: !params.row.useable,
                         })
-                        .then(res => {
-                            console.log('res => ' + res);
-                            params.row.useable = !params.row.useable;
-                        });
+                        .then(() => (params.row.useable = !params.row.useable));
                 },
             });
         },
@@ -179,26 +245,28 @@ export default {
             }, 300);
         },
         async save() {
-            const valid = await this.$validator.validateAll();
-            if (valid) {
-                alert('valid');
-            } else {
-                alert('not valid');
-            }
-            if (_isEmpty(String(this.site.url))) {
+            if (_isEmpty(String(this.site.searchUrl))) {
                 alert('url is not empty!!');
                 return;
             }
-            alert(_has(this.site.url, '[KEYWORD]'));
-            if (!_has(String(this.site.url), '[KEYWORD]')) {
-                alert('URL has [KEYWORD]');
+            if (!_includes(String(this.site.searchUrl), '[KEYWORD]')) {
+                alert(this.$t('errors.BAD_SEARCH_URL'));
                 return;
             }
-            this.close();
-            return;
-        },
-        async submit() {
-            console.log('Submitting!');
+            await this.axios
+                .post('/api/site', {
+                    id: this.site.id,
+                    name: this.site.name,
+                    searchUrl: this.site.searchUrl,
+                })
+                .then(res => {
+                    if (res.data.header === 'SUCCESS') {
+                        this.close();
+                        this.retrieveSite();
+                    } else {
+                        alert(this.$t('response.' + res.data.header));
+                    }
+                });
         },
     },
     created() {
