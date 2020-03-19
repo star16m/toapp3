@@ -4,23 +4,22 @@
             <vue-good-table
                 :columns="columns"
                 :rows="sites"
-                :row-style-class="enableSiteStyle"
                 theme="black-rhino"
                 @on-row-click="onRowClick"
+                @on-select-all="onSelectAllClick"
+                :select-options="{ enabled: true, disableSelectInfo: true }"
             >
                 <template slot="table-row" slot-scope="props">
-                    <span v-if="props.column.field == 'edit'">
-                        <v-btn color="Warn" @click.stop="editSite(props.row)">편집</v-btn>
-                    </span>
                     <span v-if="props.column.field == 'delete'">
-                        <v-btn color="Warn" @click.stop="deleteSite(props.row.id)">삭제</v-btn>
+                        <v-btn color="error" @click.stop="deleteSite(props.row.id)">삭제</v-btn>
                     </span>
-                    <span v-if="props.column.field == 'download'">
-                        <v-btn color="Warn" @click.stop="downloadSite(props.row.id)">다운로드</v-btn>
+                    <span v-if="props.column.field == 'editDetail'">
+                        <v-btn color="info" @click.stop="editSite(props.row.id)">편집</v-btn>
                     </span>
-                    <span v-else>
-                        {{ props.formattedRow[props.column.field] }}
+                    <span v-if="props.column.field == 'copy'">
+                        <v-btn color="warn" @click.stop="copySite(props.row.id)">복제</v-btn>
                     </span>
+                    <span v-else>{{ props.formattedRow[props.column.field] }}</span>
                 </template>
             </vue-good-table>
         </v-container>
@@ -30,40 +29,24 @@
                     <ValidationObserver ref="obs" v-slot="{ handleSubmit }">
                         <v-form @submit.prevent="handleSubmit(save)" id="siteForm">
                             <v-flex xs12 sm6 md4 text-xs-right mb-2 mt-2 pr-2>
-                                <v-dialog v-model="dialog" max-width="800px" content-class="dlgNewEditItem">
+                                <v-dialog
+                                    v-model="dialog"
+                                    max-width="800px"
+                                    content-class="dlgNewEditItem"
+                                >
                                     <template v-slot:activator="{ on }">
-                                        <v-btn color="primary" v-on="on" class="btnNewItem pr-4">
+                                        <v-btn color="primary" v-on="on" class="btnNewItem">
                                             <v-icon class="mr-2">mdi-plus</v-icon>
                                             {{ $t('common.NEW_ITEM', { item: $t('common.SITE') }) }}
                                         </v-btn>
                                     </template>
                                     <v-card light>
                                         <v-card-title>
-                                            <span class="headline">{{
-                                                newSiteMode ? '새로운 SITE' : 'SITE 수정'
-                                            }}</span>
+                                            <span class="headline">새로운 SITE</span>
                                         </v-card-title>
                                         <v-card-text>
                                             <v-container grid-list-md>
                                                 <v-layout wrap>
-                                                    <template v-if="site._id">
-                                                        <v-flex xs12 md4>
-                                                            <label for="createdAt">{{ $t('common.CREATED') }}</label>
-                                                            <div name="createdAt">
-                                                                {{ getFormat(site.createdAt) }}
-                                                            </div>
-                                                        </v-flex>
-                                                        <v-flex xs12 md4>
-                                                            <label for="updatedAt">{{ $t('common.UPDATED') }}</label>
-                                                            <div name="updatedAt">
-                                                                {{ getFormat(site.updatedAt) }}
-                                                            </div>
-                                                        </v-flex>
-                                                        <v-flex xs12 md4>
-                                                            <label for="verified">{{ $t('site.NAME') }}</label>
-                                                            <div name="verified"></div>
-                                                        </v-flex>
-                                                    </template>
                                                     <v-flex xs12 md6>
                                                         <VTextFieldWithValidation
                                                             rules="required|min:4|max:20"
@@ -86,14 +69,32 @@
                                                             :label="$t('site.URL')"
                                                         />
                                                     </v-flex>
+                                                    <v-flex xs12 md12>
+                                                        <VTextFieldWithValidation
+                                                            rules="required|min:4|max:255"
+                                                            v-model="site.pageSelector"
+                                                            id="pageSelector"
+                                                            name="pageSelector"
+                                                            :counter="120"
+                                                            :data-vv-as="$t('site.PAGE_SELECTOR')"
+                                                            :label="$t('site.PAGE_SELECTOR')"
+                                                        />
+                                                    </v-flex>
                                                 </v-layout>
                                             </v-container>
                                         </v-card-text>
 
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
-                                            <v-btn color="error" tile outlined @click="close" class="btnCancel">
-                                                <v-icon left>mdi-cancel</v-icon>{{ $t('common.CANCEL') }}
+                                            <v-btn
+                                                color="error"
+                                                tile
+                                                outlined
+                                                @click="close"
+                                                class="btnCancel"
+                                            >
+                                                <v-icon left>mdi-cancel</v-icon>
+                                                {{ $t('common.CANCEL') }}
                                             </v-btn>
                                             <v-btn
                                                 color="primary"
@@ -103,7 +104,8 @@
                                                 class="btnSave"
                                                 form="siteForm"
                                             >
-                                                <v-icon left>mdi-pencil</v-icon>{{ $t('common.SAVE') }}
+                                                <v-icon left>mdi-pencil</v-icon>
+                                                {{ $t('common.SAVE') }}
                                             </v-btn>
                                         </v-card-actions>
                                     </v-card>
@@ -113,29 +115,6 @@
                     </ValidationObserver>
                 </v-flex>
             </v-layout>
-        </v-container>
-        <v-container>
-            <v-flex
-                >다운로드 한 사이트 : {{ this.downloadedSiteId === undefined ? '없음' : this.downloadedSiteId }}</v-flex
-            >
-        </v-container>
-        <v-container v-if="this.downloadedSiteId !== undefined">
-            <v-layout fluid>
-                <v-textarea outlined name="input-8-4" label="Site detail" v-model="siteDetail"></v-textarea>
-            </v-layout>
-            <v-text-field
-                label="Outlined"
-                placeholder="상세 페이지 검색 selector"
-                outlined
-                v-model="pageSelector"
-                @keyup="changePageSelector"
-            ></v-text-field>
-            <v-btn color="primary" tile outlined @click="dialogSite = true" class="btnSave">
-                <v-icon left>mdi-cloud-download-outline</v-icon>화면확인
-            </v-btn>
-            <v-dialog v-model="dialogSite" max-width="800px" content-class="dlgNewEditItem">
-                <v-sheet class="pa-12" color="grey lighten-3" v-html="siteDetail"> </v-sheet>
-            </v-dialog>
         </v-container>
     </div>
 </template>
@@ -153,40 +132,30 @@ export default {
     data: () => ({
         sites: [],
         dialog: false,
-        dialogSite: false,
         columns: [
             { label: 'id', field: 'id', type: 'number' },
             { label: '사이트명', field: 'name' },
             { label: '검색URL', field: 'searchUrl' },
-            { label: '편집', field: 'edit' },
             { label: '삭제', field: 'delete' },
-            { label: '다운로드', field: 'download' },
+            { label: '편집', field: 'editDetail' },
+            { label: '복제', field: 'copy' },
         ],
         site: {},
         defaultSite: {},
-        siteDetail: '',
-        downloadedSiteId: null,
-        pageSelector: '',
+        siteExtractResultList: [],
+        foundedElementsNum: 0,
     }),
     components: {
         ValidationObserver,
         VTextFieldWithValidation,
     },
-    computed: {
-        newSiteMode() {
-            return this.site.id === undefined;
-        },
-    },
-    mounted() {
-        this.downloadedSiteId = undefined;
-    },
     methods: {
-        retrieveSite() {
-            this.axios.get('/api/sites').then(res => (this.sites = res.data));
-        },
-        editSite(site) {
-            this.site = Object.assign({}, site);
-            this.dialog = true;
+        async retrieveSite() {
+            const res = await this.axios.get('/api/sites');
+            this.sites = res.data;
+            if (this.sites.length > 0) {
+                this.refreshEnabledCheckbox();
+            }
         },
         async deleteSite(siteId) {
             const res = await this.axios.delete(`/api/site/${siteId}`);
@@ -194,43 +163,21 @@ export default {
                 this.retrieveSite();
             }
         },
-        async downloadSite(siteId) {
-            const res = await this.axios.post(`/api/site/${siteId}`);
-            if (res.data.header === 'SUCCESS') {
-                this.downloadedSiteId = siteId;
-                this.siteDetail = res.data.body;
-            }
+        editSite(siteId) {
+            this.$router.push({ name: 'SiteInput', params: { siteId } });
         },
-        changePageSelector() {
-            this.findDetail(this.downloadedSiteId, this.pageSelector);
-        },
-        async findDetail(siteId, pageSelector) {
-            const res = await this.axios.post(`/api/site/${siteId}/find`, {
-                pageSelector,
+        async onRowClick(params) {
+            const siteId = params.row.id;
+            await this.$axios.patch(`/api/site/${siteId}/useable`, {
+                id: siteId,
+                request: params.selected,
             });
-            if (res.data.header === 'SUCCESS') {
-                this.siteDetail = res.data.body;
-            }
         },
-        onRowClick(params) {
-            console.log(params);
-            this.$store.dispatch('openModal', {
-                title: 'haha',
-                message:
-                    '사이트 [' +
-                    params.row.name +
-                    '] 을 ' +
-                    (params.row.useable ? '비활성화' : '활성화') +
-                    '하시겠습니까?',
-                yes: function() {
-                    this.axios
-                        .post('/api/sites/enabled', {
-                            id: params.row.id,
-                            useable: !params.row.useable,
-                        })
-                        .then(() => (params.row.useable = !params.row.useable));
-                },
-            });
+        onSelectAllClick() {
+            console.log('click all ');
+        },
+        refreshEnabledCheckbox() {
+            this.sites.forEach(site => this.$set(site, 'vgtSelected', site.useable));
         },
         enableSiteStyle(row) {
             return row.useable ? 'accent' : '';
@@ -243,6 +190,16 @@ export default {
                     this.$refs.obs.reset();
                 });
             }, 300);
+        },
+        async copySite(siteId) {
+            const res = await this.axios.post(`/api/site/${siteId}/copy`, {
+                id: this.site.id,
+            });
+            if (res.data.header === 'SUCCESS') {
+                this.retrieveSite();
+            } else {
+                alert(this.$t('response.' + res.data.header));
+            }
         },
         async save() {
             if (_isEmpty(String(this.site.searchUrl))) {
@@ -258,18 +215,21 @@ export default {
                     id: this.site.id,
                     name: this.site.name,
                     searchUrl: this.site.searchUrl,
+                    pageSelector: this.site.pageSelector,
+                    useable: false,
                 })
                 .then(res => {
                     if (res.data.header === 'SUCCESS') {
-                        this.close();
-                        this.retrieveSite();
+                        const siteId = res.data.body.id;
+                        this.$router.push({ name: 'SiteInput', params: { siteId } });
                     } else {
                         alert(this.$t('response.' + res.data.header));
                     }
                 });
         },
     },
-    created() {
+    mounted() {
+        this.site = {};
         this.retrieveSite();
     },
 };

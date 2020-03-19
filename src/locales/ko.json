@@ -8,34 +8,16 @@
     },
     "response": {
         "DUPLICATION_KEY": "중복된 키 입니다.",
-        "SUBJECT_SHOULD_NOT_BE_EMPTY": "대상을 지정하지 않거나 비워둘 수 없습니다."
+        "SUBJECT_SHOULD_NOT_BE_EMPTY": "대상을 지정하지 않거나 비워둘 수 없습니다.",
+        "PARSE_ERROR": "파싱에 실패하였습니다.",
+        "NOT_FOUND": "{subject}을/를 찾지 못하였습니다."
     },
     "site": {
         "NAME": "사이트 이름",
-        "URL": "사이트 URL"
+        "URL": "사이트 URL",
+        "PAGE_SELECTOR": "각 링크를 포함하는 css-selector"
     },
     "errors": {
-        "BAD_TOKEN": "Bad tokenaaaaaaaaaaaaa",
-        "WRONG_PASSWORD": "Wrong passwordaaaaaaaaaaaaaaaa",
-        "USER_DOES_NOT_EXIST": "User does not existsaaaaaaaaaaaaaaaaaaa",
-        "PASSWORDS_DONT_MATCH": "Passwords don´t matchaaaaaaaaaaaaa",
-        "PASSWORD_TOO_SHORT_MIN_5": "hahahahahahPassword too short, minimum 5 charactersaaaaaaaaaaa",
-        "BLOCKED_USER": "Too many failed login attempts, user blocked temporarelyaaaaaaaaaaaaaaaaa",
-        "SERVER_TIMEOUT_CONNECTION_ERROR": "Server is not responding, connection erroraaaaaaaaaaaaaaaaa",
-        "404": "페이지를 찾을 수 없습니다.aaaaaaaaaaaaaaaaa",
-        "EMAIL_IS_NOT_VALID": "E-mail not validaaaaaaaaaaaaaaaaa",
-        "IS_EMPTY": "Empty fieldsaaaaaaaaaaaaaaaaa",
-        "ERROR": "Erroraaaaaaaaaaaaaaaaa",
-        "MISSING": "Missing fieldsaaaaaaaaaaaaaaaaa",
-        "NOT_FOUND_OR_ALREADY_VERIFIED": "Not found or already verifiedaaaaaaaaaaaaaaaaa",
-        "NOT_FOUND_OR_ALREADY_USED": "Not found or already usedaaaaaaaaaaaaaaaaa",
-        "NOT_FOUND": "Not foundaaaaaaaaaaaaaaaaa",
-        "UNAUTHORIZED": "Unauthorizedaaaaaaaaaaaaaaaaa",
-        "EMAIL_ALREADY_EXISTS": "E-mail already existsaaaaaaaaaaaaaaaaa",
-        "ID_MALFORMED": "ID malformedaaaaaaaaaaaaaaaaa",
-        "ERROR_WITH_FILTER": "Error with filteraaaaaaaaaaaaaaaaa",
-        "CITY_ALREADY_EXISTS": "City already existsaaaaaaaaaaaaaaaaa",
-        "AUTHENTICATE_ERROR": "인증시 오류가 발생하였습니다.aaaaaaaaaaaaaaaaa",
         "BAD_SEARCH_URL": "URL 에 [KEYWORD] 가 반드시 포함되어야 합니다."
     }
 }
