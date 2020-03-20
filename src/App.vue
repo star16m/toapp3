@@ -7,8 +7,10 @@
                 solo-inverted
                 flat
                 hide-details
-                label="검색하기"
+                label="키워드 추가"
                 prepend-inner-icon="mdi-database-search"
+                v-model="newKeyword"
+                @keydown.enter.prevent="addKeyword"
             ></v-text-field>
             <v-spacer></v-spacer>
         </v-app-bar>
@@ -34,13 +36,7 @@
                 <v-card-title class="headline" v-show="messagePayload.title">{{ messagePayload.title }}</v-card-title>
                 <v-card-text v-show="messagePayload.message">{{ messagePayload.message }}</v-card-text>
                 <v-card-actions v-show="messagePayload.input" v-focus>
-                    <v-text-field
-                        outlined
-                        :label="messagePayload.input"
-                        v-model="messagePayload.inputValue"
-                        @keypress.13.prevent="ok"
-                        v-focus
-                    ></v-text-field>
+                    <v-text-field outlined :label="messagePayload.input" v-model="messagePayload.inputValue" @keypress.13.prevent="ok" v-focus></v-text-field>
                 </v-card-actions>
                 <v-card-actions>
                     <div class="flex-grow-1"></div>
@@ -57,6 +53,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import './components/axios';
+import _isEmpty from 'lodash/isEmpty';
 export default {
     props: {
         source: String,
@@ -81,6 +78,7 @@ export default {
             { icon: 'mdi-message-bulleted', title: 'Message', path: '/message' },
             { icon: 'mdi-credit-card-plus', title: 'Keyword', path: '/keyword' },
         ],
+        newKeyword: null,
     }),
     computed: {
         ...mapGetters(['messagePayload']),
@@ -112,6 +110,26 @@ export default {
                 this.messagePayload.yes();
             }
             this.closeModal();
+        },
+        async addKeyword() {
+            if (_isEmpty(this.newKeyword)) {
+                this.$store.dispatch('openModal', {
+                    title: '키워드 입력',
+                    message: '키워드를 입력해 주세요.',
+                });
+                return;
+            }
+            const res = await this.axios.post('/api/keywords', {
+                keyword: this.newKeyword,
+            });
+            if (res.data.header === 'SUCCESS') {
+                this.newKeyword = '';
+                if (this.$router.currentRoute.name === 'keyword') {
+                    this.$router.go();
+                } else {
+                    this.$router.push({ name: 'keyword' });
+                }
+            }
         },
     },
     components: {},

@@ -24,11 +24,11 @@ export default {
         ],
     }),
     created() {
-        this.selectAllKeyword();
+        this.fetchKeywords();
     },
     methods: {
-        selectAllKeyword() {
-            this.axios.get('/api/keywords').then(res => (this.keywords = res.data));
+        fetchKeywords() {
+            this.axios.get('/api/keywords').then(res => (this.keywords = res.data.body));
         },
         onRowClick(params) {
             if (params.row.keyword) {
@@ -38,7 +38,7 @@ export default {
                     yes: () => {
                         this.axios.delete('/api/keywords/' + params.row.id).then(res => {
                             if (res.data.header === 'SUCCESS') {
-                                this.selectAllKeyword();
+                                this.fetchKeywords();
                             } else {
                                 alert(res.data.header);
                             }

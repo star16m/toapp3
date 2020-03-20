@@ -1,7 +1,7 @@
 <template>
     <div class="site">
         <v-container v-if="hasSiteId">
-            <h1>{{`[${site.id}] - [${site.name}] 상세편집`}}</h1>
+            <h1>{{ `[${site.id}] - [${site.name}] 상세편집` }}</h1>
             <v-row>
                 <v-col>
                     <v-textarea
@@ -31,13 +31,7 @@
                     <v-text-field v-model="site.name" :counter="20" outlined label="사이트 명"></v-text-field>
                 </v-col>
                 <v-col>
-                    <v-text-field
-                        v-model="site.searchUrl"
-                        :counter="120"
-                        outlined
-                        label="사이트 검색 URL"
-                        @keyup.enter="changeSelector"
-                    ></v-text-field>
+                    <v-text-field v-model="site.searchUrl" :counter="120" outlined label="사이트 검색 URL" @keyup.enter="changeSelector"></v-text-field>
                 </v-col>
             </v-row>
             <v-row>
@@ -164,22 +158,11 @@
             </v-row>
             <v-row>
                 <v-col>
-                    <v-btn color="primary" tile outlined @click="changeSelector" class="btnSave">
-                        <v-icon left>mdi-check</v-icon>체크
-                    </v-btn>&nbsp;
-                    <v-btn
-                        v-if="accessDetail"
-                        color="primary"
-                        tile
-                        outlined
-                        @click="changeDetailSelector"
-                        class="btnSave"
-                    >
-                        <v-icon left>mdi-check-all</v-icon>상세 체크
-                    </v-btn>&nbsp;
-                    <v-btn color="primary" tile outlined @click="save" class="btnSave">
-                        <v-icon left>mdi-cloud-download-outline</v-icon>저장
-                    </v-btn>
+                    <v-btn color="primary" tile outlined @click="changeSelector" class="btnSave"> <v-icon left>mdi-check</v-icon>체크 </v-btn>&nbsp;
+                    <v-btn v-if="accessDetail" color="primary" tile outlined @click="changeDetailSelector" class="btnSave">
+                        <v-icon left>mdi-check-all</v-icon>상세 체크 </v-btn
+                    >&nbsp;
+                    <v-btn color="primary" tile outlined @click="save" class="btnSave"> <v-icon left>mdi-cloud-download-outline</v-icon>저장 </v-btn>
                 </v-col>
             </v-row>
             <v-bottom-sheet v-model="dialog4extractResultList" persistent>
@@ -187,11 +170,7 @@
                     <v-card light>
                         <v-card-text>
                             <div>{{ siteExtractResultList.length + '개의 링크를 찾았습니다.' + (accessDetail ? '상세 조회 가능합니다.' : '') }}</div>
-                            <v-btn
-                                class="mt-6"
-                                color="error"
-                                @click="dialog4extractResultList = !dialog4extractResultList"
-                            >close</v-btn>
+                            <v-btn class="mt-6" color="error" @click="dialog4extractResultList = !dialog4extractResultList">close</v-btn>
                         </v-card-text>
                         <v-simple-table :dense="true" fixed-header height="500">
                             <template v-slot:default>
@@ -220,11 +199,7 @@
                 <v-sheet class="text-center">
                     <v-card light>
                         <v-card-actions>
-                            <v-btn
-                                class="mt-6"
-                                color="error"
-                                @click="dialog4extractDetailResultList = !dialog4extractDetailResultList"
-                            >close</v-btn>
+                            <v-btn class="mt-6" color="error" @click="dialog4extractDetailResultList = !dialog4extractDetailResultList">close</v-btn>
                         </v-card-actions>
                         <v-card-title>
                             <div>상세 페이지 추출 정보</div>
@@ -291,13 +266,6 @@ export default {
             this.fetchListPage();
         },
         async changeDetailSelector() {
-            console.log('this is changeDetailSelector');
-            if (this.selectedSite) {
-                console.log('seleted site item!!!');
-            }
-            console.log(this.selectedSite);
-            console.log(this.selectedSite.title);
-            console.log(this.selectedSite.linkURL);
             this.fetchDetailPage();
         },
         async fetchListPage() {
@@ -323,10 +291,16 @@ export default {
             }
         },
         async fetchDetailPage() {
+            if (_isEmpty(this.selectedSite.linkURL)) {
+                alert(this.$t('errors.SELECT_DETAIL_SITE'));
+                return;
+            }
             const siteId = this.site.id;
             const requestDetailPage = {};
             requestDetailPage.site = Object.assign({}, this.site);
-            requestDetailPage.detailPageUrl = this.siteExtractResultList[0].linkURL;
+            requestDetailPage.detailPageUrl = this.selectedSite.linkURL;
+            requestDetailPage.title = this.selectedSite.title;
+            requestDetailPage.size = this.selectedSite.size;
             const res = await this.axios.post(`/api/site/${siteId}/findDetail`, requestDetailPage);
             if (res.data.header === 'SUCCESS') {
                 this.siteDetailSource = res.data.body.detailPageSource; // await JSON.stringify(res.data.body.extractDetailResult);

@@ -1,14 +1,7 @@
 <template>
     <div class="site">
         <v-container fluid grid-system-md>
-            <vue-good-table
-                :columns="columns"
-                :rows="sites"
-                theme="black-rhino"
-                @on-row-click="onRowClick"
-                @on-select-all="onSelectAllClick"
-                :select-options="{ enabled: true, disableSelectInfo: true }"
-            >
+            <vue-good-table :columns="columns" :rows="sites" theme="black-rhino" :select-options="{ enabled: false, disableSelectInfo: true }">
                 <template slot="table-row" slot-scope="props">
                     <span v-if="props.column.field == 'delete'">
                         <v-btn color="error" @click.stop="deleteSite(props.row.id)">삭제</v-btn>
@@ -18,6 +11,10 @@
                     </span>
                     <span v-if="props.column.field == 'copy'">
                         <v-btn color="warn" @click.stop="copySite(props.row.id)">복제</v-btn>
+                    </span>
+                    <span v-if="props.column.field == 'enable'">
+                        <v-btn v-if="props.row.useable" color="warn" @click.stop="useableSite(props.row)">비활성화</v-btn>
+                        <v-btn v-else color="primary" @click.stop="useableSite(props.row)">활성화</v-btn>
                     </span>
                     <span v-else>{{ props.formattedRow[props.column.field] }}</span>
                 </template>
@@ -29,11 +26,7 @@
                     <ValidationObserver ref="obs" v-slot="{ handleSubmit }">
                         <v-form @submit.prevent="handleSubmit(save)" id="siteForm">
                             <v-flex xs12 sm6 md4 text-xs-right mb-2 mt-2 pr-2>
-                                <v-dialog
-                                    v-model="dialog"
-                                    max-width="800px"
-                                    content-class="dlgNewEditItem"
-                                >
+                                <v-dialog v-model="dialog" max-width="800px" content-class="dlgNewEditItem">
                                     <template v-slot:activator="{ on }">
                                         <v-btn color="primary" v-on="on" class="btnNewItem">
                                             <v-icon class="mr-2">mdi-plus</v-icon>
@@ -86,24 +79,11 @@
 
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
-                                            <v-btn
-                                                color="error"
-                                                tile
-                                                outlined
-                                                @click="close"
-                                                class="btnCancel"
-                                            >
+                                            <v-btn color="error" tile outlined @click="close" class="btnCancel">
                                                 <v-icon left>mdi-cancel</v-icon>
                                                 {{ $t('common.CANCEL') }}
                                             </v-btn>
-                                            <v-btn
-                                                color="primary"
-                                                tile
-                                                outlined
-                                                type="submit"
-                                                class="btnSave"
-                                                form="siteForm"
-                                            >
+                                            <v-btn color="primary" tile outlined type="submit" class="btnSave" form="siteForm">
                                                 <v-icon left>mdi-pencil</v-icon>
                                                 {{ $t('common.SAVE') }}
                                             </v-btn>
@@ -139,6 +119,7 @@ export default {
             { label: '삭제', field: 'delete' },
             { label: '편집', field: 'editDetail' },
             { label: '복제', field: 'copy' },
+            { label: '활성화', field: 'enable' },
         ],
         site: {},
         defaultSite: {},
@@ -166,15 +147,13 @@ export default {
         editSite(siteId) {
             this.$router.push({ name: 'SiteInput', params: { siteId } });
         },
-        async onRowClick(params) {
-            const siteId = params.row.id;
+        async useableSite(site) {
+            const siteId = site.id;
             await this.$axios.patch(`/api/site/${siteId}/useable`, {
                 id: siteId,
-                request: params.selected,
+                request: !site.useable,
             });
-        },
-        onSelectAllClick() {
-            console.log('click all ');
+            this.retrieveSite();
         },
         refreshEnabledCheckbox() {
             this.sites.forEach(site => this.$set(site, 'vgtSelected', site.useable));

@@ -1,7 +1,11 @@
 {
     "common": {
         "SITE": "사이트",
-
+        "KEYWORD": "키워드",
+        "SIZE": "사이즈",
+        "DATE": "일자",
+        "TITLE":"제목",
+        "DOWNLOAD":"다운로드",
         "SAVE": "저장",
         "CANCEL": "취소",
         "NEW_ITEM": "새로운 {item} 추가"
@@ -18,6 +22,7 @@
         "PAGE_SELECTOR": "각 링크를 포함하는 css-selector"
     },
     "errors": {
-        "BAD_SEARCH_URL": "URL 에 [KEYWORD] 가 반드시 포함되어야 합니다."
+        "BAD_SEARCH_URL": "URL 에 [KEYWORD] 가 반드시 포함되어야 합니다.",
+        "SELECT_DETAIL_SITE": "상세 페이지를 선택해 주세요."
     }
 }
