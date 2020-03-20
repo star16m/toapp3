@@ -10,7 +10,7 @@
                 label="키워드 추가"
                 prepend-inner-icon="mdi-database-search"
                 v-model="newKeyword"
-                @keydown.enter.prevent="addKeyword"
+                @submit="addKeyword"
             ></v-text-field>
             <v-spacer></v-spacer>
         </v-app-bar>
