@@ -8,7 +8,8 @@
         "DOWNLOAD":"다운로드",
         "SAVE": "저장",
         "CANCEL": "취소",
-        "NEW_ITEM": "새로운 {item} 추가"
+        "NEW_ITEM": "새로운 {item} 추가",
+        "CONFIRM": "확인"
     },
     "response": {
         "DUPLICATION_KEY": "중복된 키 입니다.",
