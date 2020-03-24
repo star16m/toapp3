@@ -16,6 +16,7 @@ export default new Router({
         {
             path: '/data',
             name: 'data',
+            props: true,
             component: () => import('@/views/Data.vue'),
         },
         {

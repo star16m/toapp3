@@ -1,15 +1,20 @@
 <template>
     <v-container fluid>
         <v-row dense>
-            <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
-                <v-card color="#385F73" dark>
-                    <v-card-title class="headline">Unlimited music now</v-card-title>
+            <v-col v-for="(dataInfo, i) in dataInfos" :key="i" :cols="getFlex(dataInfo)">
+                <v-card
+                    :class="dataInfo.filterRequestType === 'KEYWORD' ? 'data-' + dataInfo.filterRequestType + (i - 1) : 'data-' + dataInfo.filterRequestType"
+                    dark
+                    @click="confirms(dataInfo)"
+                >
+                    <v-card-title
+                        class="headline"
+                        v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"
+                    ></v-card-title>
 
-                    <v-card-subtitle>asdfasfdasdfListen to your favorite artists and albums whenever and wherever, online and offline.</v-card-subtitle>
-
-                    <v-card-actions>
-                        <v-btn text dark @click="confirms">{{ $t('common.CONFIRM') }}</v-btn>
-                    </v-card-actions>
+                    <v-card-subtitle
+                        v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })"
+                    />
                 </v-card>
             </v-col>
         </v-row>
@@ -18,12 +23,62 @@
 <script>
 export default {
     data: () => ({
-        cards: [{}, {}, {}],
+        dataInfos: [],
     }),
+    mounted() {
+        this.fetchDataInfo();
+    },
     methods: {
-        confirms() {
-            console.log('confirm!');
+        confirms(dataInfo) {
+            this.$router.push({
+                name: 'data',
+                params: {
+                    filterRequestType: dataInfo.filterRequestType,
+                    filterTarget: dataInfo.filterTarget,
+                },
+            });
+        },
+        async fetchDataInfo() {
+            const res = await this.axios.get('/api/data-info');
+            if (res.data.header === 'SUCCESS') {
+                this.dataInfos = res.data.body;
+            }
+        },
+        getFlex(dataInfo) {
+            return dataInfo.filterRequestType === 'KEYWORD' ? 6 : 12;
         },
     },
 };
 </script>
+
+<style scoped>
+.data-TOP {
+    background-color: #22558a;
+}
+
+.data-LAST_DAYS {
+    background-color: #ff2a00e3;
+}
+
+.data-KEYWORD1 {
+    background-color: #43722d;
+}
+.data-KEYWORD2 {
+    background-color: #369d62;
+}
+.data-KEYWORD3 {
+    background-color: #b3d12f;
+}
+.data-KEYWORD4 {
+    background-color: #d1982f;
+}
+.data-KEYWORD5 {
+    background-color: #763eac;
+}
+.data-KEYWORD6 {
+    background-color: #b41010;
+}
+.data-KEYWORD7 {
+    background-color: #faec25;
+}
+</style>
