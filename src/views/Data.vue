@@ -27,6 +27,7 @@
                 :rows="datas"
                 :row-style-class="downloadedDataStyle"
                 theme="black-rhino"
+                :line-numbers="true"
             >
                 <template slot="table-row" slot-scope="props">
                     <div v-if="props.column.field == 'download'">
@@ -45,6 +46,7 @@
     </div>
 </template>
 <script>
+import _isEmpty from 'lodash/isEmpty';
 export default {
     data: () => ({
         datas: [],
@@ -56,19 +58,19 @@ export default {
             { label: '다운로드', field: 'download' },
         ],
         apiFilters: [],
-        selectedKeyword: null,
+        selectedKeyword: {},
+        defaultFilter: { filterRequestType: 'ALL', filterTarget: 0 },
     }),
-    computed: {
-        dataLength() {
-            return this.datas.length;
-        },
-    },
     methods: {
         async retrieveData() {
             const res = await this.axios.get('/api/data-info');
             this.apiFilters = res.data.body;
-            const dataRes = await this.axios.get('/api/datas');
-            this.datas = dataRes.data.body;
+            if (!_isEmpty(this.$route.params)) {
+                this.selectedKeyword = await this.$route.params;
+            } else {
+                this.selectedKeyword = this.defaultFilter;
+            }
+            this.changeKeyword();
         },
         downloadData(data) {
             this.axios
