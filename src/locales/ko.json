@@ -1,7 +1,7 @@
 {
     "common": {
         "SITE": "사이트",
-        "KEYWORD": "키워드",
+        "KEYWORD": "K",
         "SIZE": "사이즈",
         "DATE": "일자",
         "TITLE": "제목",
@@ -17,7 +17,8 @@
         "TOP": "최근 [{target}] 개",
         "LAST_DAYS": "최근 [{target}] 일",
         "DESCRIPTION": "[{target}] 개 데이터",
-        "HINT": "[{count}] 개의 데이터가 있습니다."
+        "HINT": "[{count}] 개의 데이터가 있습니다.",
+        "EMPTY_DATA": "데이터가 존재하지 않습니다."
     },
     "response": {
         "DUPLICATION_KEY": "중복된 키 입니다.",
