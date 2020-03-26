@@ -4,7 +4,7 @@
       <v-select
         v-model="selectedKeyword"
         :items="apiFilters"
-        label="데이터 조회"
+        label="`$t('common.SEARCH_DATA')`"
         item-value="filterTarget"
         item-text="`$t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget })`"
         outlined
@@ -12,14 +12,24 @@
         @change="changeKeyword"
         return-object
       >
-        <template slot="selection" slot-scope="data">{{
-          $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) + ' [' + data.item.filteredResult + ']'
-        }}</template>
-        <template slot="item" slot-scope="data">{{
-          $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) + ' [' + data.item.filteredResult + ']'
-        }}</template>
+        <template slot="selection" slot-scope="data">
+          {{
+          $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) + ' => ' + $t('dataInfo.DESCRIPTION', { target: data.item.filteredResult })
+          }}
+        </template>
+        <template slot="item" slot-scope="data">
+          {{
+          $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) + ' => ' + $t('dataInfo.DESCRIPTION', { target: data.item.filteredResult })
+          }}
+        </template>
       </v-select>
-      <vue-good-table :columns="columns" :rows="datas" :row-style-class="downloadedDataStyle" theme="black-rhino my-table" :line-numbers="false">
+      <vue-good-table
+        :columns="columns"
+        :rows="datas"
+        :row-style-class="downloadedDataStyle"
+        theme="black-rhino my-table"
+        :line-numbers="false"
+      >
         <div slot="emptystate">{{ $t('dataInfo.EMPTY_DATA') }}</div>
         <template slot="table-row" slot-scope="props">
           <div v-if="props.column.field == 'keyword'">
@@ -33,7 +43,12 @@
           <div v-else-if="props.column.field == 'date'" class="text-center">
             <div>{{ props.row.date | dateParse('YYYY-MM-DD') | dateFormat('MM/DD') }}</div>
             <div>{{ '\n' + props.row.size + '\n' }}</div>
-            <v-btn :disabled="props.row.download" color="primary" @click.stop="downloadData(props.row)" small>{{ $t('common.DOWNLOAD') }}</v-btn>
+            <v-btn
+              :disabled="props.row.download"
+              color="primary"
+              @click.stop="downloadData(props.row)"
+              small
+            >{{ $t('common.DOWNLOAD') }}</v-btn>
           </div>
           <div v-else>{{ props.formattedRow[props.column.field] }}</div>
         </template>
@@ -48,9 +63,9 @@ export default {
     return {
       datas: [],
       columns: [
-        { label: 'K', field: 'keyword', type: 'string' },
-        { label: '정보', field: 'date' },
-        { label: '제목', field: 'title' },
+        { label: this.$t('data.columns.keyword'), field: 'keyword', type: 'string' },
+        { label: this.$t('data.columns.info'), field: 'date' },
+        { label: this.$t('data.columns.title'), field: 'title' },
       ],
       apiFilters: [],
       selectedKeyword: {},

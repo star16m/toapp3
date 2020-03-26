@@ -7,9 +7,14 @@
           dark
           @click="confirms(dataInfo)"
         >
-          <v-card-title class="headline" v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"></v-card-title>
+          <v-card-title
+            class="headline"
+            v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"
+          ></v-card-title>
 
-          <v-card-subtitle v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })" />
+          <v-card-subtitle
+            v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })"
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -49,6 +54,10 @@ export default {
 </script>
 
 <style scoped>
+.data-ALL {
+  background-color: #66a06de3;
+}
+
 .data-TOP {
   background-color: #22558a;
 }

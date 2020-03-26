@@ -1,7 +1,12 @@
 <template>
   <div class="site">
     <v-container fluid grid-system-md>
-      <vue-good-table :columns="columns" :rows="sites" theme="black-rhino" :select-options="{ enabled: false, disableSelectInfo: true }">
+      <vue-good-table
+        :columns="columns"
+        :rows="sites"
+        theme="black-rhino"
+        :select-options="{ enabled: false, disableSelectInfo: true }"
+      >
         <div slot="emptystate">{{ $t('dataInfo.EMPTY_DATA') }}</div>
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'delete'">
@@ -84,7 +89,14 @@
                         <v-icon left>mdi-cancel</v-icon>
                         {{ $t('common.CANCEL') }}
                       </v-btn>
-                      <v-btn color="primary" tile outlined type="submit" class="btnSave" form="siteForm">
+                      <v-btn
+                        color="primary"
+                        tile
+                        outlined
+                        type="submit"
+                        class="btnSave"
+                        form="siteForm"
+                      >
                         <v-icon left>mdi-pencil</v-icon>
                         {{ $t('common.SAVE') }}
                       </v-btn>
@@ -115,13 +127,13 @@ export default {
       sites: [],
       dialog: false,
       columns: [
-        { label: 'id', field: 'id', type: 'number' },
-        { label: '사이트명', field: 'name' },
-        { label: '검색URL', field: 'searchUrl' },
-        { label: '삭제', field: 'delete' },
-        { label: '편집', field: 'editDetail' },
-        { label: '복제', field: 'copy' },
-        { label: '활성화', field: 'enable' },
+        { label: this.$t('site.columns.id'), field: 'id', type: 'number' },
+        { label: this.$t('site.columns.name'), field: 'name' },
+        { label: this.$t('site.columns.searchUrl'), field: 'searchUrl' },
+        { label: this.$t('site.columns.delete'), field: 'delete' },
+        { label: this.$t('site.columns.editDetail'), field: 'editDetail' },
+        { label: this.$t('site.columns.copy'), field: 'copy' },
+        { label: this.$t('site.columns.enable'), field: 'enable' },
       ],
       site: {},
       defaultSite: {},

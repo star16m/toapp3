@@ -1,38 +1,70 @@
 {
-    "common": {
-        "SITE": "사이트",
-        "KEYWORD": "K",
-        "SIZE": "사이즈",
-        "DATE": "일자",
-        "TITLE": "제목",
-        "DOWNLOAD": "다운로드",
-        "SAVE": "저장",
-        "CANCEL": "취소",
-        "NEW_ITEM": "새로운 {item} 추가",
-        "CONFIRM": "확인"
-    },
-    "dataInfo": {
-        "ALL": "전체",
-        "KEYWORD": "키워드 [{target}]",
-        "TOP": "최근 [{target}] 개",
-        "LAST_DAYS": "최근 [{target}] 일",
-        "DESCRIPTION": "[{target}] 개 데이터",
-        "HINT": "[{count}] 개의 데이터가 있습니다.",
-        "EMPTY_DATA": "데이터가 존재하지 않습니다."
-    },
-    "response": {
-        "DUPLICATION_KEY": "중복된 키 입니다.",
-        "SUBJECT_SHOULD_NOT_BE_EMPTY": "대상을 지정하지 않거나 비워둘 수 없습니다.",
-        "PARSE_ERROR": "파싱에 실패하였습니다.",
-        "NOT_FOUND": "{subject}을/를 찾지 못하였습니다."
-    },
-    "site": {
-        "NAME": "사이트 이름",
-        "URL": "사이트 URL",
-        "PAGE_SELECTOR": "각 링크를 포함하는 css-selector"
-    },
-    "errors": {
-        "BAD_SEARCH_URL": "URL 에 [KEYWORD] 가 반드시 포함되어야 합니다.",
-        "SELECT_DETAIL_SITE": "상세 페이지를 선택해 주세요."
+  "common": {
+    "SITE": "사이트",
+    "SIZE": "사이즈",
+    "DATE": "일자",
+    "TITLE": "제목",
+    "DOWNLOAD": "다운로드",
+    "SAVE": "저장",
+    "CANCEL": "취소",
+    "NEW_ITEM": "새로운 {item} 추가",
+    "CONFIRM": "확인",
+    "SEARCH": "조회",
+    "SEARCH_DATA": "데이터 조회",
+    "TYPE": "타입"
+  },
+  "dataInfo": {
+    "ALL": "전체",
+    "KEYWORD": "키워드 [{target}]",
+    "TOP": "최근 [{target}] 개",
+    "LAST_DAYS": "최근 [{target}] 일",
+    "DESCRIPTION": "[{target}] 개 데이터",
+    "HINT": "[{count}] 개의 데이터가 있습니다.",
+    "EMPTY_DATA": "데이터가 존재하지 않습니다."
+  },
+  "response": {
+    "DUPLICATION_KEY": "중복된 키 입니다.",
+    "SUBJECT_SHOULD_NOT_BE_EMPTY": "대상을 지정하지 않거나 비워둘 수 없습니다.",
+    "PARSE_ERROR": "파싱에 실패하였습니다.",
+    "NOT_FOUND": "{subject}을/를 찾지 못하였습니다."
+  },
+  "data": {
+    "columns": {
+      "keyword": "키",
+      "info": "정보",
+      "title": "@:common.TITLE"
     }
+  },
+  "message": {
+    "columns": {
+      "id": "ID",
+      "type": "@:common.TYPE",
+      "createDate": "일시",
+      "message": "메세지"
+    }
+  },
+  "keyword": {
+    "columns": {
+      "id": "ID",
+      "keyword": "키워드"
+    }
+  },
+  "site": {
+    "NAME": "사이트 이름",
+    "URL": "사이트 URL",
+    "PAGE_SELECTOR": "각 링크를 포함하는 css-selector",
+    "columns": {
+      "id": "ID",
+      "name": "이름",
+      "searchUrl": "검색URL",
+      "delete": "삭제",
+      "editDetail": "편집",
+      "copy": "복제",
+      "enable": "활성화"
+    }
+  },
+  "errors": {
+    "BAD_SEARCH_URL": "URL 에 [KEYWORD] 가 반드시 포함되어야 합니다.",
+    "SELECT_DETAIL_SITE": "상세 페이지를 선택해 주세요."
+  }
 }

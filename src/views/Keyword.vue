@@ -1,7 +1,12 @@
 <template>
   <div class="keyword">
     <v-container fluid grid-system-md>
-      <vue-good-table :columns="columns" :rows="keywords" theme="black-rhino" @on-row-click="onRowClick">
+      <vue-good-table
+        :columns="columns"
+        :rows="keywords"
+        theme="black-rhino"
+        @on-row-click="onRowClick"
+      >
         <div slot="emptystate">{{ $t('dataInfo.EMPTY_DATA') }}</div>
       </vue-good-table>
     </v-container>
@@ -22,8 +27,8 @@ export default {
     return {
       keywords: [],
       columns: [
-        { label: 'id', field: 'id', type: 'number', width: '100px' },
-        { label: '키워드', field: 'keyword' },
+        { label: this.$t('keyword.columns.id'), field: 'id', type: 'number', width: '100px' },
+        { label: this.$t('keyword.columns.keyword'), field: 'keyword' },
       ],
     };
   },

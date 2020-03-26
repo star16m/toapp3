@@ -40,10 +40,5 @@ export default new Router({
       props: true,
       component: () => import('@/views/SiteInput.vue'),
     },
-    {
-      path: '/keyword/input',
-      name: 'keywordInput',
-      component: () => import('@/views/KeywordInput.vue'),
-    },
   ],
 });
