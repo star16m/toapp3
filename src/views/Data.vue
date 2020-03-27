@@ -15,9 +15,7 @@
         <template slot="selection" slot-scope="data">
           <v-flex
             >{{ $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) }}
-            <v-badge color="green" :content="data.item.filteredResult">
-              Item Two
-            </v-badge>
+            <v-badge color="green" :content="data.item.filteredResult"></v-badge>
           </v-flex>
         </template>
         <template slot="item" slot-scope="data">
