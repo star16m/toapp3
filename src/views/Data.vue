@@ -13,23 +13,24 @@
         return-object
       >
         <template slot="selection" slot-scope="data">
-          {{
-          $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) + ' => ' + $t('dataInfo.DESCRIPTION', { target: data.item.filteredResult })
-          }}
+          <v-flex
+            >{{ $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) }}
+            <v-badge color="green" :content="data.item.filteredResult">
+              Item Two
+            </v-badge>
+          </v-flex>
         </template>
         <template slot="item" slot-scope="data">
-          {{
-          $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) + ' => ' + $t('dataInfo.DESCRIPTION', { target: data.item.filteredResult })
-          }}
+          <v-flex>{{ $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) }} </v-flex>
+          <v-chip class="ma-2" color="green" text-color="white">
+            <v-avatar left class="green darken-4">
+              {{ data.item.filteredResult }}
+            </v-avatar>
+            datas
+          </v-chip>
         </template>
       </v-select>
-      <vue-good-table
-        :columns="columns"
-        :rows="datas"
-        :row-style-class="downloadedDataStyle"
-        theme="black-rhino my-table"
-        :line-numbers="false"
-      >
+      <vue-good-table :columns="columns" :rows="datas" :row-style-class="downloadedDataStyle" theme="black-rhino my-table" :line-numbers="true">
         <div slot="emptystate">{{ $t('dataInfo.EMPTY_DATA') }}</div>
         <template slot="table-row" slot-scope="props">
           <div v-if="props.column.field == 'keyword'">
@@ -43,12 +44,7 @@
           <div v-else-if="props.column.field == 'date'" class="text-center">
             <div>{{ props.row.date | dateParse('YYYY-MM-DD') | dateFormat('MM/DD') }}</div>
             <div>{{ '\n' + props.row.size + '\n' }}</div>
-            <v-btn
-              :disabled="props.row.download"
-              color="primary"
-              @click.stop="downloadData(props.row)"
-              small
-            >{{ $t('common.DOWNLOAD') }}</v-btn>
+            <v-btn :disabled="props.row.download" color="primary" @click.stop="downloadData(props.row)" small>{{ $t('common.DOWNLOAD') }}</v-btn>
           </div>
           <div v-else>{{ props.formattedRow[props.column.field] }}</div>
         </template>
