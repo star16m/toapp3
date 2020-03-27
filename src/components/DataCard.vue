@@ -7,14 +7,9 @@
           dark
           @click="confirms(dataInfo)"
         >
-          <v-card-title
-            class="headline"
-            v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"
-          ></v-card-title>
+          <v-card-title class="headline" v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"></v-card-title>
 
-          <v-card-subtitle
-            v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })"
-          />
+          <v-card-subtitle v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })" />
         </v-card>
       </v-col>
     </v-row>
@@ -41,10 +36,12 @@ export default {
       });
     },
     async fetchDataInfo() {
+      this.$store.dispatch('openLoader');
       const res = await this.axios.get('/api/data-info');
       if (res.data.header === 'SUCCESS') {
         this.dataInfos = res.data.body;
       }
+      this.$store.dispatch('closeLoader');
     },
     getFlex(dataInfo) {
       return dataInfo.filterRequestType === 'KEYWORD' ? 6 : 12;

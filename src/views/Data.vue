@@ -4,7 +4,7 @@
       <v-select
         v-model="selectedKeyword"
         :items="apiFilters"
-        label="`$t('common.SEARCH_DATA')`"
+        :label="$t('common.SEARCH_DATA')"
         item-value="filterTarget"
         item-text="`$t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget })`"
         outlined
@@ -69,6 +69,7 @@ export default {
   },
   methods: {
     async retrieveData() {
+      this.$store.dispatch('openLoader');
       const res = await this.axios.get('/api/data-info');
       this.apiFilters = res.data.body;
       if (!_isEmpty(this.$route.params)) {
@@ -89,12 +90,15 @@ export default {
       return row.download ? 'white' : 'gray';
     },
     async changeKeyword() {
-      const res = await this.axios.post('/api/datas/filter', {
-        request: {
-          filterRequestType: this.selectedKeyword.filterRequestType,
-          filterTarget: this.selectedKeyword.filterTarget,
-        },
-      });
+      this.$store.dispatch('openLoader');
+      const res = await this.axios
+        .post('/api/datas/filter', {
+          request: {
+            filterRequestType: this.selectedKeyword.filterRequestType,
+            filterTarget: this.selectedKeyword.filterTarget,
+          },
+        })
+        .then(this.$store.dispatch('closeLoader'));
       this.datas = res.data.body;
     },
   },

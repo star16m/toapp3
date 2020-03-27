@@ -17,6 +17,7 @@ export default new Vuex.Store({
       yes: null,
     },
     showModal: false,
+    showLoader: false,
   },
   mutations: {
     setModalMessage(state, messagePayload) {
@@ -26,6 +27,12 @@ export default new Vuex.Store({
     closeModal(state) {
       state.showModal = false;
     },
+    openLoader(state) {
+      state.showLoader = true;
+    },
+    closeLoader(state) {
+      state.showLoader = false;
+    },
   },
   getters: {
     messagePayload(state) {
@@ -34,6 +41,9 @@ export default new Vuex.Store({
     showModal(state) {
       return state.showModal;
     },
+    showLoader(state) {
+      return state.showLoader;
+    },
   },
   actions: {
     openModal({ commit }, messagePayload) {
@@ -41,6 +51,12 @@ export default new Vuex.Store({
     },
     closeModal({ commit }) {
       commit('closeModal');
+    },
+    openLoader({ commit }) {
+      commit('openLoader');
+    },
+    closeLoader({ commit }) {
+      commit('closeLoader');
     },
   },
   modules,

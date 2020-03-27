@@ -1,12 +1,7 @@
 <template>
   <div class="message">
     <v-container fluid grid-system-md>
-      <vue-good-table
-        :columns="columns"
-        :rows="messages"
-        @on-row-click="onRowClick"
-        theme="black-rhino"
-      >
+      <vue-good-table :columns="columns" :rows="messages" @on-row-click="onRowClick" theme="black-rhino">
         <div slot="emptystate">{{ $t('dataInfo.EMPTY_DATA') }}</div>
       </vue-good-table>
     </v-container>
@@ -42,12 +37,13 @@ export default {
       ],
     };
   },
-  created() {
-    this.axios.get('/api/messages').then(res => {
-      if (res.data.header === 'SUCCESS') {
-        this.messages = res.data.body;
-      }
-    });
+  async mounted() {
+    this.$store.dispatch('openLoader');
+    const res = await this.axios.get('/api/messages');
+    if (res.data.header === 'SUCCESS') {
+      this.messages = res.data.body;
+    }
+    this.$store.dispatch('closeLoader');
   },
   methods: {
     onRowClick(params) {

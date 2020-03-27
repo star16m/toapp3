@@ -1,12 +1,7 @@
 <template>
   <div class="site">
     <v-container fluid grid-system-md>
-      <vue-good-table
-        :columns="columns"
-        :rows="sites"
-        theme="black-rhino"
-        :select-options="{ enabled: false, disableSelectInfo: true }"
-      >
+      <vue-good-table :columns="columns" :rows="sites" theme="black-rhino" :select-options="{ enabled: false, disableSelectInfo: true }">
         <div slot="emptystate">{{ $t('dataInfo.EMPTY_DATA') }}</div>
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'delete'">
@@ -27,7 +22,7 @@
       </vue-good-table>
     </v-container>
     <v-container>
-      <v-layout fluid justify-end>
+      <v-layout fluid>
         <v-flex shrink>
           <ValidationObserver ref="obs" v-slot="{ handleSubmit }">
             <v-form @submit.prevent="handleSubmit(save)" id="siteForm">
@@ -89,14 +84,7 @@
                         <v-icon left>mdi-cancel</v-icon>
                         {{ $t('common.CANCEL') }}
                       </v-btn>
-                      <v-btn
-                        color="primary"
-                        tile
-                        outlined
-                        type="submit"
-                        class="btnSave"
-                        form="siteForm"
-                      >
+                      <v-btn color="primary" tile outlined type="submit" class="btnSave" form="siteForm">
                         <v-icon left>mdi-pencil</v-icon>
                         {{ $t('common.SAVE') }}
                       </v-btn>

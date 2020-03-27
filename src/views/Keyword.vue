@@ -1,18 +1,13 @@
 <template>
   <div class="keyword">
     <v-container fluid grid-system-md>
-      <vue-good-table
-        :columns="columns"
-        :rows="keywords"
-        theme="black-rhino"
-        @on-row-click="onRowClick"
-      >
+      <vue-good-table :columns="columns" :rows="keywords" theme="black-rhino" @on-row-click="onRowClick">
         <div slot="emptystate">{{ $t('dataInfo.EMPTY_DATA') }}</div>
       </vue-good-table>
     </v-container>
     <v-container>
-      <v-layout fluid justify-end>
-        <v-flex shrink>
+      <v-layout fluid>
+        <v-flex>
           <v-btn color="primary" @click="inputKeyword">키워드 입력</v-btn>
         </v-flex>
       </v-layout>

@@ -2,7 +2,7 @@
   <v-app id="keep">
     <v-app-bar app clipped-left color="#4c5c7a">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-layout class="white--text title mr-5" router :to="{ name: 'home' }">ToApp</v-layout>
+      <v-layout class="white--text title mr-5" router :to="{ name: 'home' }">ToApap</v-layout>
       <v-text-field
         solo-inverted
         flat
@@ -32,11 +32,11 @@
       <router-view></router-view>
     </v-content>
     <v-dialog v-model="showModal" max-width="290">
-      <v-card v-focus>
+      <v-card>
         <v-card-title class="headline" v-show="messagePayload.title">{{ messagePayload.title }}</v-card-title>
         <v-card-text v-show="messagePayload.message">{{ messagePayload.message }}</v-card-text>
-        <v-card-actions v-show="messagePayload.input" v-focus>
-          <v-text-field outlined :label="messagePayload.input" v-model="messagePayload.inputValue" @keypress.13.prevent="ok" v-focus></v-text-field>
+        <v-card-actions v-show="messagePayload.input">
+          <v-text-field outlined :label="messagePayload.input" v-model="messagePayload.inputValue" @keypress.13.prevent="ok" v-focus autofocus></v-text-field>
         </v-card-actions>
         <v-card-actions>
           <div class="flex-grow-1"></div>
@@ -46,6 +46,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <loader />
     <v-footer app center color="#4c5c7a">ToApp</v-footer>
   </v-app>
 </template>
@@ -54,20 +55,10 @@
 import { mapGetters, mapActions } from 'vuex';
 import './components/axios';
 import _isEmpty from 'lodash/isEmpty';
+import Loader from '@/components/Loader';
 export default {
   props: {
     source: String,
-  },
-  directives: {
-    focus: {
-      // 디렉티브 정의
-      componentUpdated: function(el) {
-        el.focus();
-      },
-      bind: function(el) {
-        el.focus();
-      },
-    },
   },
   data() {
     return {
@@ -134,6 +125,8 @@ export default {
       }
     },
   },
-  components: {},
+  components: {
+    Loader,
+  },
 };
 </script>
