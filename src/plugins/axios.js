@@ -1,5 +1,8 @@
 import Vue from 'vue';
 import axios from 'axios';
+import { formatErrorMessages } from '@/utils/utils';
+import toast from '@/plugins/toast';
+import store from '../store/store';
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL || '';
 axios.defaults.headers.common['Accept-Language'] = JSON.parse(localStorage.getItem('locale')) || 'ko';
@@ -18,6 +21,9 @@ axios.interceptors.request.use(
     //         localStorage.getItem('token')
     //     )}`
     // }
+    if (!store.getters.showLoader) {
+      store.dispatch('openLoader');
+    }
     return config;
   },
   error => {
@@ -28,9 +34,18 @@ axios.interceptors.request.use(
 // Add a response interceptor
 axios.interceptors.response.use(
   response => {
+    if (response.data.header && response.data.header !== 'SUCCESS') {
+      toast.error(formatErrorMessages('response', response.data.header));
+    }
+    store.dispatch('closeLoader');
     return response;
   },
   error => {
+    if (error.response && error.response.data.header) {
+      toast.error(formatErrorMessages('response', error.response.data.header));
+    } else {
+      toast.error(formatErrorMessages('common', 'ERROR_MESSAGE'));
+    }
     return Promise.reject(error);
   },
 );

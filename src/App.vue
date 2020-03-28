@@ -53,7 +53,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import './components/axios';
 import _isEmpty from 'lodash/isEmpty';
 import Loader from '@/components/Loader';
 export default {
@@ -130,3 +129,15 @@ export default {
   },
 };
 </script>
+
+<style>
+.toast {
+  margin-top: 60px !important;
+}
+
+@media screen and (max-width: 700px) {
+  .toast {
+    margin-top: 130px !important;
+  }
+}
+</style>

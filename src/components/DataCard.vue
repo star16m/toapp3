@@ -13,6 +13,9 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row dense v-if="dataInfos == null || dataInfos.length < 1">
+      데이터가 없습니다.
+    </v-row>
   </v-container>
 </template>
 <script>
@@ -22,8 +25,8 @@ export default {
       dataInfos: [],
     };
   },
-  mounted() {
-    this.fetchDataInfo();
+  async mounted() {
+    await this.fetchDataInfo();
   },
   methods: {
     confirms(dataInfo) {
@@ -36,12 +39,10 @@ export default {
       });
     },
     async fetchDataInfo() {
-      this.$store.dispatch('openLoader');
       const res = await this.axios.get('/api/data-info');
       if (res.data.header === 'SUCCESS') {
         this.dataInfos = res.data.body;
       }
-      this.$store.dispatch('closeLoader');
     },
     getFlex(dataInfo) {
       return dataInfo.filterRequestType === 'KEYWORD' ? 6 : 12;

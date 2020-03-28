@@ -67,12 +67,12 @@ export default {
   },
   methods: {
     async retrieveData() {
-      this.$store.dispatch('openLoader');
       const res = await this.axios.get('/api/data-info');
       this.apiFilters = res.data.body;
+
       if (!_isEmpty(this.$route.params)) {
         this.selectedKeyword = await this.$route.params;
-      } else {
+      } else if (this.apiFilters) {
         this.selectedKeyword = this.apiFilters.find(f => f.filterRequestType === 'ALL');
       }
       this.changeKeyword();
@@ -88,15 +88,12 @@ export default {
       return row.download ? 'white' : 'gray';
     },
     async changeKeyword() {
-      this.$store.dispatch('openLoader');
-      const res = await this.axios
-        .post('/api/datas/filter', {
-          request: {
-            filterRequestType: this.selectedKeyword.filterRequestType,
-            filterTarget: this.selectedKeyword.filterTarget,
-          },
-        })
-        .then(this.$store.dispatch('closeLoader'));
+      const res = await this.axios.post('/api/datas/filter', {
+        request: {
+          filterRequestType: this.selectedKeyword.filterRequestType,
+          filterTarget: this.selectedKeyword.filterTarget,
+        },
+      });
       this.datas = res.data.body;
     },
   },

@@ -17,7 +17,7 @@ export default new Vuex.Store({
       yes: null,
     },
     showModal: false,
-    showLoader: false,
+    showLoader: true,
   },
   mutations: {
     setModalMessage(state, messagePayload) {

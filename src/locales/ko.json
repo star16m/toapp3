@@ -12,7 +12,8 @@
     "SEARCH": "조회",
     "SEARCH_DATA": "데이터 조회",
     "TYPE": "타입",
-    "LOAD_MESSAGE": "로드 중입니다..."
+    "LOAD_MESSAGE": "로드 중입니다...",
+    "ERROR_MESSAGE": "Error 가 발생하였습니다. 관리자에게 문의하세요."
   },
   "dataInfo": {
     "ALL": "전체",

@@ -38,12 +38,10 @@ export default {
     };
   },
   async mounted() {
-    this.$store.dispatch('openLoader');
     const res = await this.axios.get('/api/messages');
     if (res.data.header === 'SUCCESS') {
       this.messages = res.data.body;
     }
-    this.$store.dispatch('closeLoader');
   },
   methods: {
     onRowClick(params) {

@@ -8,7 +8,7 @@ import { ValidationProvider, extend } from 'vee-validate';
 import VueFilterDateParse from 'vue-filter-date-parse';
 import VueFilterDateFormat from 'vue-filter-date-format';
 import 'vue-thin-modal/dist/vue-thin-modal.css';
-import './components/axios';
+import '@/plugins/axios';
 import * as rules from 'vee-validate/dist/rules';
 import { messages } from 'vee-validate/dist/locale/ko.json';
 Object.keys(rules).forEach(rule => {
@@ -23,7 +23,7 @@ import VueGoodTablePlugin from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css';
 
 Vue.config.productionTip = false;
-import i18n from './i18n';
+import i18n from '@/plugins/i18n';
 import './components/common.js';
 Vue.use(VueGoodTablePlugin);
 Vue.use(VueThinModal);
