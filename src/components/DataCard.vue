@@ -1,14 +1,23 @@
 <template>
   <v-container fluid>
     <v-row dense>
-      <v-col v-for="(dataInfo, i) in dataInfos" :key="i" :cols="getFlex(dataInfo)">
-        <v-card
-          :class="dataInfo.filterRequestType === 'KEYWORD' ? 'data-' + dataInfo.filterRequestType + (i - 1) : 'data-' + dataInfo.filterRequestType"
-          dark
-          @click="confirms(dataInfo)"
-        >
+      <v-col v-for="(dataInfo, i) in dataInfoTop" :key="i" cols="12">
+        <v-card :class="'data-' + dataInfo.filterRequestType" dark @click="confirms(dataInfo)">
           <v-card-title class="headline" v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"></v-card-title>
-
+          <v-card-subtitle v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })" />
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row dense class="my-n2">
+      <v-col md="6">
+        <v-card class="my-2" v-for="(dataInfo, i) in dataInfosOdd" :key="i" :class="'data-KEYWORD' + (i * 2 + 1)" dark @click="confirms(dataInfo)">
+          <v-card-title class="headline" v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"></v-card-title>
+          <v-card-subtitle v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })" />
+        </v-card>
+      </v-col>
+      <v-col md="6">
+        <v-card class="my-2" v-for="(dataInfo, i) in dataInfosEven" :key="i" :class="'data-KEYWORD' + (i * 2 + 2)" dark @click="confirms(dataInfo)">
+          <v-card-title class="headline" v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"></v-card-title>
           <v-card-subtitle v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })" />
         </v-card>
       </v-col>
@@ -24,6 +33,17 @@ export default {
     return {
       dataInfos: [],
     };
+  },
+  computed: {
+    dataInfoTop() {
+      return this.dataInfos.filter((v, i) => i < 3);
+    },
+    dataInfosOdd() {
+      return this.dataInfos.filter((v, i) => i > 2 && i % 2 === 1);
+    },
+    dataInfosEven() {
+      return this.dataInfos.filter((v, i) => i > 2 && i % 2 === 0);
+    },
   },
   async mounted() {
     await this.fetchDataInfo();
@@ -43,9 +63,6 @@ export default {
       if (res.data.header === 'SUCCESS') {
         this.dataInfos = res.data.body;
       }
-    },
-    getFlex(dataInfo) {
-      return dataInfo.filterRequestType === 'KEYWORD' ? 6 : 12;
     },
   },
 };
