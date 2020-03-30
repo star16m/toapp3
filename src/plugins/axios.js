@@ -21,9 +21,9 @@ axios.interceptors.request.use(
     //         localStorage.getItem('token')
     //     )}`
     // }
-    if (!store.getters.showLoader) {
-      store.dispatch('openLoader');
-    }
+    // if (!store.getters.showLoader) {
+    store.dispatch('openLoader');
+    // }
     return config;
   },
   error => {
