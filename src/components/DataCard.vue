@@ -3,28 +3,55 @@
     <v-row dense>
       <v-col v-for="(dataInfo, i) in dataInfoTop" :key="i" cols="12">
         <v-card :class="'data-' + dataInfo.filterRequestType" dark @click="confirms(dataInfo)">
-          <v-card-title class="headline" v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"></v-card-title>
-          <v-card-subtitle v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })" />
+          <v-card-title
+            class="headline"
+            v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"
+          ></v-card-title>
+          <v-card-subtitle
+            v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })"
+          />
         </v-card>
       </v-col>
     </v-row>
     <v-row dense class="my-n2">
       <v-col md="6">
-        <v-card class="my-2" v-for="(dataInfo, i) in dataInfosOdd" :key="i" :class="'data-KEYWORD' + (i * 2 + 1)" dark @click="confirms(dataInfo)">
-          <v-card-title class="headline" v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"></v-card-title>
-          <v-card-subtitle v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })" />
+        <v-card
+          class="my-2"
+          v-for="(dataInfo, i) in dataInfosOdd"
+          :key="i"
+          :class="'data-KEYWORD' + (i * 2 + 1)"
+          dark
+          @click="confirms(dataInfo)"
+        >
+          <v-card-title
+            class="headline"
+            v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"
+          ></v-card-title>
+          <v-card-subtitle
+            v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })"
+          />
         </v-card>
       </v-col>
       <v-col md="6">
-        <v-card class="my-2" v-for="(dataInfo, i) in dataInfosEven" :key="i" :class="'data-KEYWORD' + (i * 2 + 2)" dark @click="confirms(dataInfo)">
-          <v-card-title class="headline" v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"></v-card-title>
-          <v-card-subtitle v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })" />
+        <v-card
+          class="my-2"
+          v-for="(dataInfo, i) in dataInfosEven"
+          :key="i"
+          :class="'data-KEYWORD' + (i * 2 + 2)"
+          dark
+          @click="confirms(dataInfo)"
+        >
+          <v-card-title
+            class="headline"
+            v-text="$t('dataInfo.' + dataInfo.filterRequestType, { target: dataInfo.filterTarget })"
+          ></v-card-title>
+          <v-card-subtitle
+            v-text="$t('dataInfo.DESCRIPTION', { target: dataInfo.filteredResult })"
+          />
         </v-card>
       </v-col>
     </v-row>
-    <v-row dense v-if="dataInfos == null || dataInfos.length < 1">
-      데이터가 없습니다.
-    </v-row>
+    <v-row dense v-if="dataInfos == null || dataInfos.length < 1">데이터가 없습니다.</v-row>
   </v-container>
 </template>
 <script>
@@ -45,8 +72,8 @@ export default {
       return this.dataInfos.filter((v, i) => i > 2 && i % 2 === 0);
     },
   },
-  async mounted() {
-    await this.fetchDataInfo();
+  mounted() {
+    this.fetchDataInfo();
   },
   methods: {
     confirms(dataInfo) {

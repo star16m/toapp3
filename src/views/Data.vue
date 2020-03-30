@@ -13,22 +13,25 @@
         return-object
       >
         <template slot="selection" slot-scope="data">
-          <v-flex
-            >{{ $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) }}
+          <v-flex>
+            {{ $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) }}
             <v-badge color="green" :content="data.item.filteredResult"></v-badge>
           </v-flex>
         </template>
         <template slot="item" slot-scope="data">
-          <v-flex>{{ $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) }} </v-flex>
+          <v-flex>{{ $t('dataInfo.' + data.item.filterRequestType, { target: data.item.filterTarget }) }}</v-flex>
           <v-chip class="ma-2" color="green" text-color="white">
-            <v-avatar left class="green darken-4">
-              {{ data.item.filteredResult }}
-            </v-avatar>
-            datas
+            <v-avatar left class="green darken-4">{{ data.item.filteredResult }}</v-avatar>datas
           </v-chip>
         </template>
       </v-select>
-      <vue-good-table :columns="columns" :rows="datas" :row-style-class="downloadedDataStyle" theme="black-rhino my-table" :line-numbers="true">
+      <vue-good-table
+        :columns="columns"
+        :rows="datas"
+        :row-style-class="downloadedDataStyle"
+        theme="black-rhino my-table"
+        :line-numbers="true"
+      >
         <div slot="emptystate">{{ $t('dataInfo.EMPTY_DATA') }}</div>
         <template slot="table-row" slot-scope="props">
           <div v-if="props.column.field == 'keyword'">
@@ -42,7 +45,12 @@
           <div v-else-if="props.column.field == 'date'" class="text-center">
             <div>{{ props.row.date | dateParse('YYYY-MM-DD') | dateFormat('MM/DD') }}</div>
             <div>{{ '\n' + props.row.size + '\n' }}</div>
-            <v-btn :disabled="props.row.download" color="primary" @click.stop="downloadData(props.row)" small>{{ $t('common.DOWNLOAD') }}</v-btn>
+            <v-btn
+              :disabled="props.row.download"
+              color="primary"
+              @click.stop="downloadData(props.row)"
+              small
+            >{{ $t('common.DOWNLOAD') }}</v-btn>
           </div>
           <div v-else>{{ props.formattedRow[props.column.field] }}</div>
         </template>
@@ -72,8 +80,9 @@ export default {
 
       if (!_isEmpty(this.$route.params)) {
         this.selectedKeyword = await this.$route.params;
+        localStorage.setItem('selectedKeyword', JSON.stringify(this.selectedKeyword));
       } else if (this.apiFilters) {
-        this.selectedKeyword = this.apiFilters.find(f => f.filterRequestType === 'ALL');
+        this.selectedKeyword = JSON.parse(localStorage.getItem('selectedKeyword')) || this.apiFilters.find(f => f.filterRequestType === 'ALL');
       }
       this.changeKeyword();
     },
@@ -95,6 +104,7 @@ export default {
         },
       });
       this.datas = res.data.body;
+      localStorage.setItem('selectedKeyword', JSON.stringify(this.selectedKeyword));
     },
   },
   mounted() {

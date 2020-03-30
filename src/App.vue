@@ -36,13 +36,20 @@
         <v-card-title class="headline" v-show="messagePayload.title">{{ messagePayload.title }}</v-card-title>
         <v-card-text v-show="messagePayload.message">{{ messagePayload.message }}</v-card-text>
         <v-card-actions v-show="messagePayload.input">
-          <v-text-field outlined :label="messagePayload.input" v-model="messagePayload.inputValue" @keypress.13.prevent="ok" v-focus autofocus></v-text-field>
+          <v-text-field
+            outlined
+            :label="messagePayload.input"
+            v-model="messagePayload.inputValue"
+            @keypress.13.prevent="ok"
+            v-focus
+            autofocus
+          ></v-text-field>
         </v-card-actions>
         <v-card-actions>
           <div class="flex-grow-1"></div>
           <!-- <v-btn color="green darken-1" text @click="closeModal">Disagree</v-btn> -->
-          <v-btn color="green darken-1" v-show="messagePayload.ok" text @click.prevent="ok">OK </v-btn>
-          <v-btn color="green darken-1" v-show="messagePayload.yes" text @click="yes">YES </v-btn>
+          <v-btn color="green darken-1" v-show="messagePayload.ok" text @click.prevent="ok">OK</v-btn>
+          <v-btn color="green darken-1" v-show="messagePayload.yes" text @click="yes">YES</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -132,6 +139,9 @@ export default {
 
 <style>
 .toast {
+  border-radius: 10px;
+}
+/* .toast {
   margin-top: 60px !important;
 }
 
@@ -139,5 +149,5 @@ export default {
   .toast {
     margin-top: 130px !important;
   }
-}
+} */
 </style>

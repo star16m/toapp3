@@ -1,8 +1,24 @@
 <template>
   <div class="keyword">
     <v-container fluid grid-system-md>
-      <vue-good-table :columns="columns" :rows="keywords" theme="black-rhino" @on-row-click="onRowClick">
+      <vue-good-table
+        :columns="columns"
+        :rows="keywords"
+        theme="black-rhino"
+        @on-row-click="onRowClick"
+      >
         <div slot="emptystate">{{ $t('dataInfo.EMPTY_DATA') }}</div>
+        <template slot="table-row" slot-scope="props">
+          <div v-if="props.column.field == 'collect'" class="text-center">
+            <v-btn
+              :disabled="props.row.download"
+              color="primary"
+              @click.stop="collectData(props.row)"
+              small
+            >{{ $t('common.COLLECT') }}</v-btn>
+          </div>
+          <div v-else>{{ props.formattedRow[props.column.field] }}</div>
+        </template>
       </vue-good-table>
     </v-container>
     <v-container>
@@ -17,6 +33,7 @@
 
 <script>
 import _isEmpty from 'lodash/isEmpty';
+import toast from '@/plugins/toast';
 export default {
   data() {
     return {
@@ -24,6 +41,7 @@ export default {
       columns: [
         { label: this.$t('keyword.columns.id'), field: 'id', type: 'number', width: '100px' },
         { label: this.$t('keyword.columns.keyword'), field: 'keyword' },
+        { label: this.$t('keyword.columns.collect'), field: 'collect' },
       ],
     };
   },
@@ -43,13 +61,16 @@ export default {
             this.axios.delete('/api/keywords/' + params.row.id).then(res => {
               if (res.data.header === 'SUCCESS') {
                 this.fetchKeywords();
-              } else {
-                alert(res.data.header);
               }
             });
           },
         });
       }
+    },
+    async collectData(keyword) {
+      const keywordId = keyword.id;
+      await this.axios.post(`/api/keywords/${keywordId}/collect`);
+      toast.success(this.$t('messages.tryCollect', { keywordText: keyword.keyword }));
     },
     inputKeyword() {
       this.$store.dispatch('openModal', {
@@ -71,6 +92,7 @@ export default {
             .then(res => {
               if (res.data.header === 'SUCCESS') {
                 this.keywords.push(res.data.body);
+                toast.success(this.$t('messages.successAddKeyword', { keyword: inputValue }));
               } else {
                 alert(this.$t('response.' + res.data.header));
               }

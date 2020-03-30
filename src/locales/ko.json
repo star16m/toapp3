@@ -10,10 +10,15 @@
     "NEW_ITEM": "새로운 {item} 추가",
     "CONFIRM": "확인",
     "SEARCH": "조회",
+    "COLLECT": "수집",
     "SEARCH_DATA": "데이터 조회",
     "TYPE": "타입",
     "LOAD_MESSAGE": "로드 중입니다...",
     "ERROR_MESSAGE": "Error 가 발생하였습니다. 관리자에게 문의하세요."
+  },
+  "messages": {
+    "tryCollect": "키워드 [{keywordText}] 를 수집시도 하였습니다.",
+    "successAddKeyword": "키워드 [{keyword}] 를 추가하였습니다."
   },
   "dataInfo": {
     "ALL": "전체",
@@ -48,7 +53,8 @@
   "keyword": {
     "columns": {
       "id": "ID",
-      "keyword": "키워드"
+      "keyword": "키워드",
+      "collect": "수집"
     }
   },
   "site": {
