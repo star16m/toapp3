@@ -41,7 +41,6 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
-    store.dispatch('addDebugMessage', 'received errors');
     if (error.response && error.response.data.header) {
       toast.error(formatErrorMessages('response', error.response.data.header));
     } else {

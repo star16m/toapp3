@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="showLoader" persistent width="300">
-    <v-card color="secondary">
+    <v-card color="secondary" dark>
       <v-card-text>
         {{ $t('common.LOAD_MESSAGE') }}
         <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
