@@ -16,6 +16,7 @@ export default new Vuex.Store({
       ok: null,
       yes: null,
     },
+    debugMessages: [],
     showModal: false,
     showLoader: false,
   },
@@ -33,6 +34,9 @@ export default new Vuex.Store({
     closeLoader(state) {
       state.showLoader = false;
     },
+    addDebugMessage(state, message) {
+      state.debugMessages.push(message);
+    },
   },
   getters: {
     messagePayload(state) {
@@ -43,6 +47,9 @@ export default new Vuex.Store({
     },
     showLoader(state) {
       return state.showLoader;
+    },
+    debugMessages(state) {
+      return state.debugMessages;
     },
   },
   actions: {
@@ -57,6 +64,9 @@ export default new Vuex.Store({
     },
     closeLoader({ commit }) {
       commit('closeLoader');
+    },
+    addDebugMessage({ commit }, payload) {
+      commit('addDebugMessage', payload);
     },
   },
   modules,
