@@ -22,7 +22,6 @@ axios.interceptors.request.use(
     //     )}`
     // }
     // if (!store.getters.showLoader) {
-    store.dispatch('addDebugMessage', 'try request');
     store.dispatch('openLoader');
     // }
     return config;
@@ -35,7 +34,6 @@ axios.interceptors.request.use(
 // Add a response interceptor
 axios.interceptors.response.use(
   response => {
-    store.dispatch('addDebugMessage', 'receive normal response');
     if (response.data.header && response.data.header !== 'SUCCESS') {
       toast.error(formatErrorMessages('response', response.data.header));
     }

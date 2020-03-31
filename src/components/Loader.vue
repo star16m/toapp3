@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="showLoader" persistent width="300">
-    <v-card color="primary">
+    <v-card color="secondary">
       <v-card-text>
         {{ $t('common.LOAD_MESSAGE') }}
         <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
@@ -12,8 +12,6 @@
 <script>
 import { mapGetters } from 'vuex';
 export default {
-  computed: {
-    ...mapGetters(['showLoader']),
-  },
+  computed: mapGetters(['showLoader']),
 };
 </script>
